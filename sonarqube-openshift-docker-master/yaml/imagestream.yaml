@@ -1,0 +1,29 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+    openshift.io/image.dockerRepositoryCheck: 2020-06-29T23:47:51Z
+  creationTimestamp: null
+  generation: 1
+  labels:
+    app: sonarqube
+  name: sonarqube
+  selfLink: /apis/image.openshift.io/v1/namespaces/myproject/imagestreams/sonarqube
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+  - annotations:
+      description: The SonarQube Docker image
+      tags: sonarqube
+    from:
+      kind: DockerImage
+      name: openshiftdemos/sonarqube:6.7
+    generation: 1
+    importPolicy: {}
+    name: "6.7"
+    referencePolicy:
+      type: Source
+status:
+  dockerImageRepository: 172.30.1.1:5000/sonarqube
