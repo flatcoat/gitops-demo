@@ -23,5 +23,3 @@ spec:
     name: "6.7"
     referencePolicy:
       type: Source
-status:
-  dockerImageRepository: 172.30.1.1:5000/sonarqube
