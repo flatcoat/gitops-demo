@@ -5,7 +5,6 @@ metadata:
     openshift.io/generated-by: OpenShiftNewApp
     openshift.io/image.dockerRepositoryCheck: 2020-06-29T23:47:51Z
   creationTimestamp: null
-  generation: 1
   labels:
     app: sonarqube
   name: sonarqube
@@ -20,7 +19,6 @@ spec:
     from:
       kind: DockerImage
       name: openshiftdemos/sonarqube:6.7
-    generation: 1
     importPolicy: {}
     name: "6.7"
     referencePolicy:
