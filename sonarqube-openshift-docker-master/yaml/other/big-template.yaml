@@ -1,0 +1,385 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      openshift.io/container.sonarqube.image.entrypoint: '["./bin/run.sh"]'
+      openshift.io/deployment-config.latest-version: "1"
+      openshift.io/deployment-config.name: sonarqube
+      openshift.io/deployment.name: sonarqube-1
+      openshift.io/generated-by: OpenShiftNewApp
+      openshift.io/scc: restricted
+    creationTimestamp: null
+    generateName: sonarqube-1-
+    labels:
+      app: sonarqube
+      deployment: sonarqube-1
+      deploymentconfig: sonarqube
+    ownerReferences:
+    - apiVersion: v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicationController
+      name: sonarqube-1
+      uid: f248e612-ba62-11ea-8f7c-46673c28143b
+  spec:
+    containers:
+    - image: openshiftdemos/sonarqube@sha256:fe2c7b8e9923c4dc4bd7a5d12d51ee61eb171f8898121d5f7a921ba4e5a3e67c
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        failureThreshold: 5
+        httpGet:
+          path: /
+          port: 9000
+          scheme: HTTP
+        initialDelaySeconds: 180
+        periodSeconds: 20
+        successThreshold: 1
+        timeoutSeconds: 5
+      name: sonarqube
+      ports:
+      - containerPort: 9000
+        protocol: TCP
+      readinessProbe:
+        failureThreshold: 5
+        httpGet:
+          path: /
+          port: 9000
+          scheme: HTTP
+        initialDelaySeconds: 60
+        periodSeconds: 20
+        successThreshold: 1
+        timeoutSeconds: 5
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: 200m
+          memory: 1Gi
+      securityContext:
+        capabilities:
+          drop:
+          - KILL
+          - MKNOD
+          - SETGID
+          - SETUID
+        runAsUser: 1000130000
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /opt/sonarqube/data
+        name: sonarqube-data
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: default-token-clx95
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    imagePullSecrets:
+    - name: default-dockercfg-mmzqw
+    nodeName: localhost
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      fsGroup: 1000130000
+      seLinuxOptions:
+        level: s0:c11,c10
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoSchedule
+      key: node.kubernetes.io/memory-pressure
+      operator: Exists
+    volumes:
+    - name: sonarqube-data
+      persistentVolumeClaim:
+        claimName: sonarqube-data
+    - name: default-token-clx95
+      secret:
+        defaultMode: 420
+        secretName: default-token-clx95
+  status: {}
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    annotations:
+      openshift.io/deployer-pod.completed-at: 2020-06-29 23:50:09 +0000 UTC
+      openshift.io/deployer-pod.created-at: 2020-06-29 23:47:52 +0000 UTC
+      openshift.io/deployer-pod.name: sonarqube-1-deploy
+      openshift.io/deployment-config.latest-version: "1"
+      openshift.io/deployment-config.name: sonarqube
+      openshift.io/deployment.phase: Complete
+      openshift.io/deployment.replicas: "1"
+      openshift.io/deployment.status-reason: config change
+      openshift.io/encoded-deployment-config: |
+        {"kind":"DeploymentConfig","apiVersion":"apps.openshift.io/v1","metadata":{"name":"sonarqube","namespace":"myproject","selfLink":"/apis/apps.openshift.io/v1/namespaces/myproject/deploymentconfigs/sonarqube","uid":"f016f55f-ba62-11ea-8b66-46673c28143b","resourceVersion":"151915","generation":2,"creationTimestamp":"2020-06-29T23:47:48Z","labels":{"app":"sonarqube","deploymentconfig":"sonarqube"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"strategy":{"type":"Rolling","rollingParams":{"updatePeriodSeconds":1,"intervalSeconds":1,"timeoutSeconds":600,"maxUnavailable":"25%","maxSurge":"25%"},"resources":{},"activeDeadlineSeconds":21600},"triggers":[{"type":"ConfigChange"},{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["sonarqube"],"from":{"kind":"ImageStreamTag","namespace":"myproject","name":"sonarqube:6.7"},"lastTriggeredImage":"openshiftdemos/sonarqube@sha256:fe2c7b8e9923c4dc4bd7a5d12d51ee61eb171f8898121d5f7a921ba4e5a3e67c"}}],"replicas":1,"revisionHistoryLimit":10,"test":false,"selector":{"app":"sonarqube","deploymentconfig":"sonarqube"},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"sonarqube","deploymentconfig":"sonarqube"},"annotations":{"openshift.io/container.sonarqube.image.entrypoint":"[\"./bin/run.sh\"]","openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"volumes":[{"name":"sonarqube-data","persistentVolumeClaim":{"claimName":"sonarqube-data"}}],"containers":[{"name":"sonarqube","image":"openshiftdemos/sonarqube@sha256:fe2c7b8e9923c4dc4bd7a5d12d51ee61eb171f8898121d5f7a921ba4e5a3e67c","ports":[{"containerPort":9000,"protocol":"TCP"}],"resources":{"limits":{"cpu":"1","memory":"2Gi"},"requests":{"cpu":"200m","memory":"1Gi"}},"volumeMounts":[{"name":"sonarqube-data","mountPath":"/opt/sonarqube/data"}],"livenessProbe":{"httpGet":{"path":"/","port":9000,"scheme":"HTTP"},"initialDelaySeconds":180,"timeoutSeconds":5,"periodSeconds":20,"successThreshold":1,"failureThreshold":5},"readinessProbe":{"httpGet":{"path":"/","port":9000,"scheme":"HTTP"},"initialDelaySeconds":60,"timeoutSeconds":5,"periodSeconds":20,"successThreshold":1,"failureThreshold":5},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","imagePullPolicy":"IfNotPresent"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{},"schedulerName":"default-scheduler"}}},"status":{"latestVersion":1,"observedGeneration":1,"replicas":0,"updatedReplicas":0,"availableReplicas":0,"unavailableReplicas":0,"details":{"message":"config change","causes":[{"type":"ConfigChange"}]},"conditions":[{"type":"Available","status":"False","lastUpdateTime":"2020-06-29T23:47:48Z","lastTransitionTime":"2020-06-29T23:47:48Z","message":"Deployment config does not have minimum availability."}]}}
+    creationTimestamp: null
+    generation: 2
+    labels:
+      app: sonarqube
+      deploymentconfig: sonarqube
+      openshift.io/deployment-config.name: sonarqube
+    name: sonarqube-1
+    ownerReferences:
+    - apiVersion: apps.openshift.io/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: DeploymentConfig
+      name: sonarqube
+      uid: f016f55f-ba62-11ea-8b66-46673c28143b
+  spec:
+    replicas: 1
+    selector:
+      app: sonarqube
+      deployment: sonarqube-1
+      deploymentconfig: sonarqube
+    template:
+      metadata:
+        annotations:
+          openshift.io/container.sonarqube.image.entrypoint: '["./bin/run.sh"]'
+          openshift.io/deployment-config.latest-version: "1"
+          openshift.io/deployment-config.name: sonarqube
+          openshift.io/deployment.name: sonarqube-1
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: sonarqube
+          deployment: sonarqube-1
+          deploymentconfig: sonarqube
+      spec:
+        containers:
+        - image: openshiftdemos/sonarqube@sha256:fe2c7b8e9923c4dc4bd7a5d12d51ee61eb171f8898121d5f7a921ba4e5a3e67c
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /
+              port: 9000
+              scheme: HTTP
+            initialDelaySeconds: 180
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: sonarqube
+          ports:
+          - containerPort: 9000
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /
+              port: 9000
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            limits:
+              cpu: "1"
+              memory: 2Gi
+            requests:
+              cpu: 200m
+              memory: 1Gi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /opt/sonarqube/data
+            name: sonarqube-data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: sonarqube-data
+          persistentVolumeClaim:
+            claimName: sonarqube-data
+  status:
+    replicas: 0
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: sonarqube
+    name: sonarqube
+  spec:
+    ports:
+    - name: sonarqube
+      port: 9000
+      protocol: TCP
+      targetPort: 9000
+    selector:
+      app: sonarqube
+      deploymentconfig: sonarqube
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    generation: 2
+    labels:
+      app: sonarqube
+      deploymentconfig: sonarqube
+    name: sonarqube
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      app: sonarqube
+      deploymentconfig: sonarqube
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          openshift.io/container.sonarqube.image.entrypoint: '["./bin/run.sh"]'
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: sonarqube
+          deploymentconfig: sonarqube
+      spec:
+        containers:
+        - image: openshiftdemos/sonarqube@sha256:fe2c7b8e9923c4dc4bd7a5d12d51ee61eb171f8898121d5f7a921ba4e5a3e67c
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /
+              port: 9000
+              scheme: HTTP
+            initialDelaySeconds: 180
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: sonarqube
+          ports:
+          - containerPort: 9000
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /
+              port: 9000
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            limits:
+              cpu: "1"
+              memory: 2Gi
+            requests:
+              cpu: 200m
+              memory: 1Gi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /opt/sonarqube/data
+            name: sonarqube-data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: sonarqube-data
+          persistentVolumeClaim:
+            claimName: sonarqube-data
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - sonarqube
+        from:
+          kind: ImageStreamTag
+          name: sonarqube:6.7
+          namespace: myproject
+        lastTriggeredImage: openshiftdemos/sonarqube@sha256:fe2c7b8e9923c4dc4bd7a5d12d51ee61eb171f8898121d5f7a921ba4e5a3e67c
+      type: ImageChange
+  status:
+    availableReplicas: 0
+    latestVersion: 0
+    observedGeneration: 0
+    replicas: 0
+    unavailableReplicas: 0
+    updatedReplicas: 0
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+      openshift.io/image.dockerRepositoryCheck: 2020-06-29T23:47:51Z
+    creationTimestamp: null
+    generation: 2
+    labels:
+      app: sonarqube
+    name: sonarqube
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations:
+        description: The SonarQube Docker image
+        tags: sonarqube
+      from:
+        kind: DockerImage
+        name: 172.30.1.1:5000/myproject/sonarqube:6.7
+      generation: 2
+      importPolicy: {}
+      name: "6.7"
+      referencePolicy:
+        type: Source
+  status:
+    dockerImageRepository: ""
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      description: Route for SonarQube's http service.
+      openshift.io/generated-by: OpenShiftNewApp
+      openshift.io/host.generated: "true"
+    creationTimestamp: null
+    labels:
+      app: sonarqube
+    name: sonarqube
+  spec:
+    host: sonarqube-myproject.192.168.64.3.nip.io
+    to:
+      kind: Service
+      name: sonarqube
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: 2020-06-29T23:47:48Z
+        status: "True"
+        type: Admitted
+      host: sonarqube-myproject.192.168.64.3.nip.io
+      routerName: router
+      wildcardPolicy: None
+kind: List
+metadata: {}

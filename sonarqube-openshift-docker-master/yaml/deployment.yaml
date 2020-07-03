@@ -4,7 +4,6 @@ metadata:
   annotations:
     openshift.io/generated-by: OpenShiftNewApp
   creationTimestamp: null
-  generation: 1
   labels:
     app: sonarqube
     deploymentconfig: sonarqube
