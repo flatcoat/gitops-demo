@@ -8,7 +8,7 @@ metadata:
     app: sonarqube
     deploymentconfig: sonarqube
   name: sonarqube
-  selfLink: /apis/apps.openshift.io/v1/namespaces/myproject/deploymentconfigs/sonarqube
+  namespace: sonarqube
 spec:
   replicas: 1
   revisionHistoryLimit: 10
@@ -93,7 +93,7 @@ spec:
       from:
         kind: ImageStreamTag
         name: sonarqube:6.7
-        namespace: myproject
+        namespace: sonarqube
     type: ImageChange
 status:
   availableReplicas: 0

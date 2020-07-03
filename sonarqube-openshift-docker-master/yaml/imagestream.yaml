@@ -9,7 +9,7 @@ metadata:
   labels:
     app: sonarqube
   name: sonarqube
-  selfLink: /apis/image.openshift.io/v1/namespaces/myproject/imagestreams/sonarqube
+  namespace: sonarqube
 spec:
   lookupPolicy:
     local: false

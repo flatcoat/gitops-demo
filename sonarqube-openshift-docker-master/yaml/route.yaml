@@ -3,13 +3,11 @@ kind: Route
 metadata:
   annotations:
     description: Route for SonarQube's http service.
-    openshift.io/generated-by: OpenShiftNewApp
-    openshift.io/host.generated: "true"
   creationTimestamp: null
   labels:
     app: sonarqube
   name: sonarqube
-  selfLink: /apis/route.openshift.io/v1/namespaces/myproject/routes/sonarqube
+  namespace: sonarqube
 spec:
   host: sonarqube-myproject.192.168.64.3.nip.io
   to:
