@@ -95,10 +95,3 @@ spec:
         name: sonarqube:6.7
         namespace: sonarqube
     type: ImageChange
-status:
-  availableReplicas: 0
-  latestVersion: 0
-  observedGeneration: 0
-  replicas: 0
-  unavailableReplicas: 0
-  updatedReplicas: 0
